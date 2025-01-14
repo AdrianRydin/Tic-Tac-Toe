@@ -27,17 +27,3 @@ Här tar vi emot en inkommande spelare, antingen 'X' eller 'O'. Tanken är att n
 
 checkForDraw()
 Här kontrollerar ni om alla platser på spelplanen är upptagna eller inte. Funktionen SKALL returnera antingen true eller false.
-
-/\*
-
-För att kunna se om det är Draw, så måste vi kolla om alla platser är fyllda och det är inte tre i rad.
-
-För att kunna se om det är tre i rad, så måste vi kolla om det är tre i rad i någon av raderna, kolumnerna eller diagonalerna.
-
-För att kunna se om det är tre i rad i någon av raderna, så måste vi kolla om det är tre i rad i rad 1, rad 2 eller rad 3.
-
-för att se om spelet fortsätter, så måste vi först se om det är en tom ruta, om det är tre i rad eller om det är oavgjort.
-
-Game over är om alla rutor är uppfyllda utan att det är tre i rad.
-
-\*/
