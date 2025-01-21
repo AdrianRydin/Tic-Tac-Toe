@@ -5,22 +5,21 @@
  * Initieras genom anrop till funktionern initGlobalObject().
  */
 let oGameData = {};
-
+let value = Math.random() * (1 - 0) + 0;
 const gameAreaRef = document.getElementById("gameArea");
 
 window.addEventListener("load", () => {
   initGlobalObject();
   prepGame();
-  // if (checkForGameOver() === 1) {
-  //   console.log("Spelare 1 vann");
-  // } else if (checkForGameOver() === 2) {
-  //   console.log("Spelare 2 vann");
-  // } else if (checkForGameOver() === 3) {
-  //   console.log("Oavgjort");
-  // } else {
-  //   console.log("Spelet fortsätter");
-  // }
-
+  if (checkForGameOver() === 1) {
+    console.log("Spelare 1 vann");
+  } else if (checkForGameOver() === 2) {
+    console.log("Spelare 2 vann");
+  } else if (checkForGameOver() === 3) {
+    console.log("Oavgjort");
+  } else {
+    console.log("Spelet fortsätter");
+  }
 });
 
 /**
@@ -32,7 +31,7 @@ function initGlobalObject() {
   //Datastruktur för vilka platser som är lediga respektive har brickor
   //Genom at fylla i här med antingen X eler O kan ni testa era rättningsfunktioner
 
-  oGameData.gameField = ["X", "X", "X", "", "", "", "", "", ""];
+  oGameData.gameField = ["", "", "", "", "", "", "", "", ""];
 
   console.log(oGameData.gameField);
 
@@ -97,7 +96,6 @@ const winningCombinations = [
  * Funktionen tar inte emot några värden.
  */
 
-
 function checkForGameOver() {
   if (checkWinner(oGameData.playerOne)) {
     return 1;
@@ -154,8 +152,6 @@ function prepGame() {
   });
 }
 
-
-
 function validateForm() {
   /* 
     const nick1 = document.getElementById('nick1').value;
@@ -183,7 +179,7 @@ function validateForm() {
 
 // starta spelet efter att formuläret fyllts in korrekt
 
-function initiateGame() {
+function initiateGame(value) {
   const formRef = document.getElementById("theForm");
   let errorMsgRef = document.getElementById("errorMsg");
   oGameData.nickNamePlayerOne = document.getElementById("nick1").value;
@@ -203,17 +199,24 @@ function initiateGame() {
     tdRef.style.backgroundColor = "#ffffff";
   }
 
+  for (let i = 0; i < oGameData.gameField.length; i++) {
+    oGameData.gameField[i] = "";
+  }
+
   let playerChar;
   let playerName;
-  let value = Math.random() * (1 - 0) + 0;
+  let playerColor;
+
   console.log(value);
   if (value < 0.5) {
     playerChar = oGameData.playerOne;
     playerName = oGameData.nickNamePlayerOne;
+    playerColor = oGameData.colorPlayerOne;
     oGameData.currentPlayer = oGameData.playerOne;
   } else if (value >= 0.5) {
     playerChar = oGameData.playerTwo;
     playerName = oGameData.nickNamePlayerTwo;
+    playerColor = oGameData.colorPlayerTwo;
     oGameData.currentPlayer = oGameData.playerTwo;
   }
 
@@ -236,10 +239,42 @@ oGameData.timeRef.textContent = `${oGameData.nickNamePlayerOne} (X) börjar spel
 */
 
 // hantera en spelares drag när de klickar på en ruta
-function executeMove(event) {}
+function executeMove(value) {
+  if (event.target.tagName === "TD") {
+    let clickedCell = event.target.style;
+    let clickedCellID = event.target.dataset.id;
+    let clickedCellText = event.target;
+    if (oGameData.gameField[clickedCellID] === "") {
+      if (oGameData.currentPlayer === oGameData.playerOne) {
+        clickedCell.backgroundColor = oGameData.colorPlayerOne;
+        oGameData.gameField.splice(clickedCellID, 1, oGameData.playerOne);
+        clickedCellText.textContent = oGameData.playerOne;
+        oGameData.currentPlayer = oGameData.playerTwo;
+      } else {
+        clickedCell.backgroundColor = oGameData.colorPlayerTwo;
+        oGameData.gameField.splice(clickedCellID, 1, oGameData.playerTwo);
+        clickedCellText.textContent = oGameData.playerTwo;
+        oGameData.currentPlayer = oGameData.playerOne;
+        console.log(checkForGameOver());
+      }
+
+      if (checkForGameOver() === 1) {
+        gameOver(1);
+      } else if (checkForGameOver() === 2) {
+        gameOver(2);
+      } else if (checkForGameOver() === 3) {
+        gameOver(3);
+      }
+    } else {
+      console.log("Redan upptagen");
+    }
+  }
+}
+
 /*
 const index = event.
 */
+
 function changePlayer() {}
 
 function timer() {}
