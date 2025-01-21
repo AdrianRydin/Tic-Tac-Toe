@@ -5,6 +5,7 @@
  * Initieras genom anrop till funktionern initGlobalObject().
  */
 let oGameData = {};
+
 const gameAreaRef = document.getElementById("gameArea");
 
 window.addEventListener("load", () => {
@@ -19,6 +20,7 @@ window.addEventListener("load", () => {
   // } else {
   //   console.log("Spelet fortsätter");
   // }
+
 });
 
 /**
@@ -29,7 +31,9 @@ window.addEventListener("load", () => {
 function initGlobalObject() {
   //Datastruktur för vilka platser som är lediga respektive har brickor
   //Genom at fylla i här med antingen X eler O kan ni testa era rättningsfunktioner
+
   oGameData.gameField = ["X", "X", "X", "", "", "", "", "", ""];
+
   console.log(oGameData.gameField);
 
   /* Testdata för att testa rättningslösning */
@@ -73,6 +77,17 @@ function initGlobalObject() {
   oGameData.timeRef = document.querySelector("#errorMsg");
 }
 
+const winningCombinations = [
+  [0, 1, 2], // horisontella rader
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6], // vertikala rader
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8], // diagonaler
+  [2, 4, 6],
+];
+
 /**
  * Kontrollerar för tre i rad genom att anropa funktionen checkWinner() och checkForDraw().
  * Returnerar 0 om spelet skall fortsätta,
@@ -81,17 +96,55 @@ function initGlobalObject() {
  * returnerar 3 om det är oavgjort.
  * Funktionen tar inte emot några värden.
  */
-function checkForGameOver() {}
+
+
+function checkForGameOver() {
+  if (checkWinner(oGameData.playerOne)) {
+    return 1;
+  } else if (checkWinner(oGameData.playerTwo)) {
+    return 2;
+  } else if (checkForDraw()) {
+    return 3;
+  }
+  return 0;
+}
 
 // Säg till om ni vill få pseudokod för denna funktion
 // Viktigt att funktionen returnerar true eller false baserat på om den inskickade spelaren är winner eller ej
-function checkWinner(playerIn) {}
+
+function checkWinner(playerIn) {
+  for (const combination of winningCombinations) {
+    let [a, b, c] = combination;
+    if (
+      oGameData.gameField[a] === playerIn &&
+      oGameData.gameField[b] === playerIn &&
+      oGameData.gameField[c] === playerIn
+    ) {
+      return true; // Spelare 1 har vunnit!
+    }
+  }
+  return false; // Ingen vinst ännu.
+}
 
 //Kontrollera om alla platser i oGameData.GameField är fyllda. Om sant returnera true, annars false.
-function checkForDraw() {}
+function checkForDraw() {
+  for (let i = 0; i < oGameData.gameField.length; i++) {
+    if (oGameData.gameField[i] === "") return false;
+  }
+  return true;
+
+  // Fråga om varför det är mindre än och inte <=
+}
+
+/*
+
+ const isBoardFull = oGameData.GameField.every(cell >= cell !== '');
+ const hasNoWinner = !checkWinner(oGameData.colorPlayerOne) && !checkWinner(oGameData.colorPlayerTwo);
+ return isBoardFull && hasNoWinner;
+
+*/
 
 // Nedanstående funktioner väntar vi med!
-
 function prepGame() {
   gameAreaRef.classList.add("d-none");
   let buttonRef = document.getElementById("newGame");
@@ -100,6 +153,8 @@ function prepGame() {
     initiateGame();
   });
 }
+
+
 
 function validateForm() {
   /* 
@@ -127,6 +182,7 @@ function validateForm() {
 }
 
 // starta spelet efter att formuläret fyllts in korrekt
+
 function initiateGame() {
   const formRef = document.getElementById("theForm");
   let errorMsgRef = document.getElementById("errorMsg");
@@ -169,6 +225,7 @@ function initiateGame() {
     executeMove();
   });
 }
+
 /*
 if (validateForm()) {
 prepGame();
