@@ -139,11 +139,44 @@ function prepGame() {
   let buttonRef = document.querySelector("#newGame");
   buttonRef.addEventListener("click", () => {
     //initGlobalObject();
-    initiateGame();
+    validateForm();
   });
 }
 
-function validateForm() {}
+function validateForm() {
+  const nicknameOneRef = document.querySelector("#nick1");
+  const nicknameTwoRef = document.querySelector("#nick2");
+  const colorOneRef = document.querySelector("#color1");
+  const colorTwoRef = document.querySelector("#color2");
+
+  try {
+    if (nicknameOneRef.value.length < 3 || nicknameTwoRef.value.length < 3) {
+      throw new Error("Nickname too short");
+    } else if (
+      nicknameOneRef.value.length > 10 ||
+      nicknameTwoRef.value.length > 10
+    ) {
+      throw new Error("Nickname too long");
+    } else if (
+      colorOneRef.value === "#000000" ||
+      colorTwoRef.value === "#000000"
+    ) {
+      throw new Error("Color can't be black");
+    } else if (
+      colorOneRef.value === "#ffffff" ||
+      colorTwoRef.value === "#ffffff"
+    ) {
+      throw new Error("Color can't be white");
+    }
+    document.querySelector("#errorMsg").textContent = "";
+    initiateGame();
+    return true;
+  } catch (error) {
+    console.log(error.message);
+    document.querySelector("#errorMsg").textContent = error.message;
+    return false;
+  }
+}
 
 //Problemet med värdena i denna funktion är att
 //oGameData finns, men vi har inte kört initGlobalObject() än.
